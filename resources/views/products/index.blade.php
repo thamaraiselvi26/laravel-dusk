@@ -46,11 +46,11 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning btn-sm btn-edit-{{$product->id}}">Edit</a>
                             <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this product?')">Delete</button>
+                                <button type="submit" class="btn btn-danger btn-sm btn-del-{{$product->id}}" onclick="return confirm('Are you sure you want to delete this product?')">Delete</button>
                             </form>
                         </td>
                     </tr>
