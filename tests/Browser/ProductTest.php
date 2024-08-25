@@ -10,7 +10,7 @@ use Faker\Factory as Faker;
 
 class ProductTest extends DuskTestCase
 {
-    // use DatabaseMigrations;
+    use DatabaseMigrations;
 
     /**
      * Test product index.
@@ -68,6 +68,32 @@ class ProductTest extends DuskTestCase
                     ->assertPathIs('/products')
                     ->assertSee('Product created successfully.')
                     ->assertSee('Barbie doll');
+        });
+    }
+
+    /**
+     * Test product creation with issues.
+     *
+     * @return void
+     */
+    public function testCreateProductWithIssues()
+    {
+        $this->browse(function (Browser $browser) {
+            $faker = Faker::create();
+            $randomImagePath = $faker->image(storage_path('app/public/images'), 640, 480, null, false);
+
+            $browser->visit('/products')
+                    ->clickLink('Add New Product')
+                    ->assertPathIs('/products/create')
+                    ->type('name', 'do')
+                    ->type('description', 'Barbie Doll and Fairytale Dress-Up Set, Clothes and Accessories for Princess, Mermaid and Fairy Characters, Kids Toys and Gifts​.')
+                    ->type('price', '-1')
+                    ->attach('image', storage_path('app/public/images') . '/' . $randomImagePath)
+                    ->pause(1000)
+                    ->press('Create Product')
+                    ->assertPathIs('/products/create')
+                    ->assertSee('The name field must be at least 3 characters.')
+                    ->assertSee('The price field must be at least 0.');
         });
     }
 
